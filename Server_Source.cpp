@@ -7,7 +7,7 @@
 
 #include <conio.h>
 #include <stdlib.h>
-#include <windows.h>        //  windows.h подключать до mysql.h
+#include <windows.h>        //  windows.h РїРѕРґРєР»СЋС‡Р°С‚СЊ РґРѕ mysql.h
 #include <mysql.h>
 #include <stdio.h>
 #include <nlohmann\json.hpp>      // for using json
@@ -19,29 +19,29 @@
 
 using json = nlohmann::json;
 
- MYSQL_RES* makeRequestToDB(std::string  sqlrequest)     // запрос к БД от сервера, принимает сам запрос
+ MYSQL_RES* makeRequestToDB(std::string  sqlrequest)     // Р·Р°РїСЂРѕСЃ Рє Р‘Р” РѕС‚ СЃРµСЂРІРµСЂР°, РїСЂРёРЅРёРјР°РµС‚ СЃР°Рј Р·Р°РїСЂРѕСЃ
 {
 	const char* request = sqlrequest.c_str();      
-	MYSQL* conn;                         // создаем дескриптор соединения
-	conn = mysql_init(NULL);             //  инициализируем соединение
+	MYSQL* conn;                         // СЃРѕР·РґР°РµРј РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРµРґРёРЅРµРЅРёСЏ
+	conn = mysql_init(NULL);             //  РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЃРѕРµРґРёРЅРµРЅРёРµ
 	if (conn == NULL) {     
 		fprintf(stderr, "Error: can't create MySQL-descriptor\n");      
 	}
-	if (!mysql_real_connect(conn, "localhost", "root", "hhhesoyam1", "mytest_db2", NULL, NULL, 0))     // пытаемся подключиться к бд
+	if (!mysql_real_connect(conn, "localhost", "root", "hhhesoyam1", "mytest_db2", NULL, NULL, 0))     // РїС‹С‚Р°РµРјСЃСЏ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє Р±Рґ
 	{
 		fprintf(stderr, "Error: can't connect to database %s\n", mysql_error(conn));
 	}
 	else  fprintf(stdout, "Connected to database..\n");                    
 
-	mysql_set_character_set(conn, "utf8");                                              //  устанавливаем кодировку  utf8
+	mysql_set_character_set(conn, "utf8");                                              //  СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РєРѕРґРёСЂРѕРІРєСѓ  utf8
 	std::cout << "characterset: " << mysql_character_set_name(conn) << std::endl;
 
-	MYSQL_RES* result;                       // для результата выполнения запроса 
+	MYSQL_RES* result;                       // РґР»СЏ СЂРµР·СѓР»СЊС‚Р°С‚Р° РІС‹РїРѕР»РЅРµРЅРёСЏ Р·Р°РїСЂРѕСЃР° 
 	
-	if (mysql_query(conn, request) > 0) {         // выполнятся SQL запрос  
+	if (mysql_query(conn, request) > 0) {         // РІС‹РїРѕР»РЅСЏС‚СЃСЏ SQL Р·Р°РїСЂРѕСЃ   
 		printf("%s", mysql_error(conn));
 	}
-	if (result = mysql_store_result(conn)) {       //  массив всех строк результирующего запроса (результирующая таблица) возвращается серверу
+	if (result = mysql_store_result(conn)) {       //  РјР°СЃСЃРёРІ РІСЃРµС… СЃС‚СЂРѕРє СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРіРѕ Р·Р°РїСЂРѕСЃР° (СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰Р°СЏ С‚Р°Р±Р»РёС†Р°) РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ СЃРµСЂРІРµСЂСѓ
 		mysql_close(conn);                       
 		return result;
 	}
@@ -50,17 +50,17 @@ using json = nlohmann::json;
 		mysql_close(conn);                               
 		return 0;       
 	}
-	//mysql_free_result(result);   //  очистка результата   
+	//mysql_free_result(result);   //  РѕС‡РёСЃС‚РєР° СЂРµР·СѓР»СЊС‚Р°С‚Р°    
 }
 
-DWORD WINAPI serverReceive(LPVOID lpParam)   //Получение данных от клиента, принимает указатель на сокет клиента (LPVOID - указатель типа void, позже будет приведет к SOCKET*)
+DWORD WINAPI serverReceive(LPVOID lpParam)   //РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… РѕС‚ РєР»РёРµРЅС‚Р°, РїСЂРёРЅРёРјР°РµС‚ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃРѕРєРµС‚ РєР»РёРµРЅС‚Р° (LPVOID - СѓРєР°Р·Р°С‚РµР»СЊ С‚РёРїР° void, РїРѕР·Р¶Рµ Р±СѓРґРµС‚ РїСЂРёРІРµРґРµС‚ Рє SOCKET*)
 {
 	char buffer[1024] = { 0 };                
 	SOCKET client = *(SOCKET*)lpParam;        
 
 	while (true)  
 	{
-		if (recv(client, buffer, sizeof(buffer), 0) == SOCKET_ERROR)      // получаем данные от клиента 
+		if (recv(client, buffer, sizeof(buffer), 0) == SOCKET_ERROR)      // РїРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РѕС‚ РєР»РёРµРЅС‚Р°  
 		{
 			std::cout << "recv function failed with error " << WSAGetLastError() << std::endl;
 			return -1;
@@ -69,30 +69,30 @@ DWORD WINAPI serverReceive(LPVOID lpParam)   //Получение данных от клиента, прин
 		json j2 = json::parse(str);
 		std::cout << "Client sent command: " << j2["command"] << std::endl;
 		memset(buffer, 0, sizeof(buffer));          
-		if (j2["command_type"] == 1 && j2["command"] == "quit") {           //если тип команды 1, это команда серверу. quit - закрыть соединение
+		if (j2["command_type"] == 1 && j2["command"] == "quit") {           //РµСЃР»Рё С‚РёРї РєРѕРјР°РЅРґС‹ 1, СЌС‚Рѕ РєРѕРјР°РЅРґР° СЃРµСЂРІРµСЂСѓ. quit - Р·Р°РєСЂС‹С‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ
 			std::cout << "Client Disconnected.\n";
 			break;                                    
 		}
 		MYSQL_RES* result = nullptr;
-		if (j2["command_type"] == 0) {                      // если тип команды 0 - сервер делает запрос к бд
+		if (j2["command_type"] == 0) {                      // РµСЃР»Рё С‚РёРї РєРѕРјР°РЅРґС‹ 0 - СЃРµСЂРІРµСЂ РґРµР»Р°РµС‚ Р·Р°РїСЂРѕСЃ Рє Р±Рґ
 			result = makeRequestToDB(j2["command"]);
 		}
 		if (result == 0) {
 			std::string res = "incorrect SQL-request. Enter the type of the new command (0 or 1)";
-			if (send(client, res.c_str(), res.length(), 0) == SOCKET_ERROR) {                        // если makeRequestToDB вернул 0, сообщаем клиенту, что SQL-запрос составлен не верно
+			if (send(client, res.c_str(), res.length(), 0) == SOCKET_ERROR) {                        // РµСЃР»Рё makeRequestToDB РІРµСЂРЅСѓР» 0, СЃРѕРѕР±С‰Р°РµРј РєР»РёРµРЅС‚Сѓ, С‡С‚Рѕ SQL-Р·Р°РїСЂРѕСЃ СЃРѕСЃС‚Р°РІР»РµРЅ РЅРµ РІРµСЂРЅРѕ
 				continue;
 			}
 			else continue;
 		} 
-		MYSQL_ROW row;                    //  массив значений текущей строки
+		MYSQL_ROW row;                    //  РјР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё
 		int i = 0;
 		std::string res = "";
-		while (row = mysql_fetch_row(result)) {                     //  извлечение следующей строки из результирующего набора
+		while (row = mysql_fetch_row(result)) {                     //  РёР·РІР»РµС‡РµРЅРёРµ СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРё РёР· СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРіРѕ РЅР°Р±РѕСЂР°
 			for (i = 0; i < mysql_num_fields(result); i++) {    
 				res = res + row[i] + ",";                       
 			}  
 			res.back() = '\n';
-			if (send(client, res.c_str(), res.length(), 0) == SOCKET_ERROR) {                                  // отправляем получившуюся строку клиенту
+			if (send(client, res.c_str(), res.length(), 0) == SOCKET_ERROR) {                                  // РѕС‚РїСЂР°РІР»СЏРµРј РїРѕР»СѓС‡РёРІС€СѓСЋСЃСЏ СЃС‚СЂРѕРєСѓ РєР»РёРµРЅС‚Сѓ
 				std::cout << "answer from server failed with error " << WSAGetLastError() << std::endl;
 				continue;
 			}
@@ -103,7 +103,7 @@ DWORD WINAPI serverReceive(LPVOID lpParam)   //Получение данных от клиента, прин
 	return 1;
 }
 
-DWORD WINAPI serverSend(LPVOID lpParam)       //  отправка сообщений клиенту вручную
+DWORD WINAPI serverSend(LPVOID lpParam)       //  РѕС‚РїСЂР°РІРєР° СЃРѕРѕР±С‰РµРЅРёР№ РєР»РёРµРЅС‚Сѓ РІСЂСѓС‡РЅСѓСЋ
 {
 	char buffer[1024] = { 0 };
 	SOCKET client = *(SOCKET*)lpParam;
@@ -123,12 +123,12 @@ DWORD WINAPI serverSend(LPVOID lpParam)       //  отправка сообщений клиенту вру
 
 int main() {
 
-	WSADATA WSAData;               // структура с информацией о версии сокетов и пр.
-	SOCKET server, client;                //Сокеты сервера и клиента
-	SOCKADDR_IN serverAddr, clientAddr;        // Адреса  (используется для привязки через bind(), содержит семейство, адрес и порт)
+	WSADATA WSAData;               // СЃРѕРґРµСЂР¶РёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІРµСЂСЃРёРё СЃРѕРєРµС‚РѕРІ Рё РїСЂ.
+	SOCKET server, client;                //РЎРѕРєРµС‚С‹ СЃРµСЂРІРµСЂР° Рё РєР»РёРµРЅС‚Р°
+	SOCKADDR_IN serverAddr, clientAddr;        // РђРґСЂРµСЃР°  (РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РїСЂРёРІСЏР·РєРё С‡РµСЂРµР· bind(), СЃРѕРґРµСЂР¶РёС‚ СЃРµРјРµР№СЃС‚РІРѕ, Р°РґСЂРµСЃ Рё РїРѕСЂС‚)
 
-	WSAStartup(MAKEWORD(2, 0), &WSAData);         // функция запуска сокетов, принимает версию сокетов и WSADATA
-	server = socket(AF_INET, SOCK_STREAM, 0);       // инициализируем сокет сервера функцией socket(), при успехе возвращается дескриптор сокета
+	WSAStartup(MAKEWORD(2, 0), &WSAData);         // С„СѓРЅРєС†РёСЏ Р·Р°РїСѓСЃРєР° СЃРѕРєРµС‚РѕРІ, РїСЂРёРЅРёРјР°РµС‚ РІРµСЂСЃРёСЋ СЃРѕРєРµС‚РѕРІ Рё WSADATA
+	server = socket(AF_INET, SOCK_STREAM, 0);       // РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЃРѕРєРµС‚ СЃРµСЂРІРµСЂР° С„СѓРЅРєС†РёРµР№ socket(), РїСЂРё СѓСЃРїРµС…Рµ РІРѕР·РІСЂР°С‰Р°РµС‚СЃСЏ РґРµСЃРєСЂРёРїС‚РѕСЂ СЃРѕРєРµС‚Р°
 	if (server == INVALID_SOCKET) {
 		std::cout << "Socket creation failed with error:" << WSAGetLastError() << std::endl;
 		return -1;
@@ -142,24 +142,24 @@ int main() {
 		return -1;
 	}
 
-	if (listen(server, 0) == SOCKET_ERROR) {           //Если не удалось получить запрос
+	if (listen(server, 0) == SOCKET_ERROR) {           //Р•СЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ Р·Р°РїСЂРѕСЃ
 		std::cout << "Listen function failed with error:" << WSAGetLastError() << std::endl;
 		return -1;
 	}
 	std::cout << "Listening for incoming connections....\n";
     
 	int clientAddrSize = sizeof(clientAddr);        
-	if ((client = accept(server, (SOCKADDR*)&clientAddr, &clientAddrSize)) != INVALID_SOCKET) {        		//Если соединение установлено
+	if ((client = accept(server, (SOCKADDR*)&clientAddr, &clientAddrSize)) != INVALID_SOCKET) {        		//Р•СЃР»Рё СЃРѕРµРґРёРЅРµРЅРёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ
 		std::cout << "Client connected to server\n";
 		std::cout << "You can type a message for client here, or type \"quit\" for disconnect\n";
 
-		DWORD tid;       // Идентификатор потока 
+		DWORD tid;       // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕС‚РѕРєР° 
 
-		HANDLE t1 = CreateThread(NULL, 0, serverReceive, &client, 0, &tid);    //Создание потока для фнк принятия (вызов serverReceive), вернет дескриптор потока в t1
+		HANDLE t1 = CreateThread(NULL, 0, serverReceive, &client, 0, &tid);    //РЎРѕР·РґР°РЅРёРµ РїРѕС‚РѕРєР° РґР»СЏ С„РЅРє РїСЂРёРЅСЏС‚РёСЏ (РІС‹Р·РѕРІ serverReceive), РІРµСЂРЅРµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РїРѕС‚РѕРєР° РІ t1
 		if (t1 == NULL) {
 			std::cout << "Thread Creation Error: " << WSAGetLastError() << std::endl;
 		}
-		HANDLE t2 = CreateThread(NULL, 0, serverSend, &client, 0, &tid);         //Создание потока для отправки данных (вызов serverSend), вернет дескриптор потока в t2
+		HANDLE t2 = CreateThread(NULL, 0, serverSend, &client, 0, &tid);         //РЎРѕР·РґР°РЅРёРµ РїРѕС‚РѕРєР° РґР»СЏ РѕС‚РїСЂР°РІРєРё РґР°РЅРЅС‹С… (РІС‹Р·РѕРІ serverSend), РІРµСЂРЅРµС‚ РґРµСЃРєСЂРёРїС‚РѕСЂ РїРѕС‚РѕРєР° РІ t2
 		if (t2 == NULL) {
 			std::cout << "Thread Creation Error: " << WSAGetLastError() << std::endl;
 		}
