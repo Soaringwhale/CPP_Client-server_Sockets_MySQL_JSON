@@ -8,7 +8,7 @@
 #pragma comment(lib, "WS2_32.lib")        
 using json = nlohmann::json;
 
-DWORD WINAPI clientReceive(LPVOID lpParam) {           //Получение данных от сервера
+DWORD WINAPI clientReceive(LPVOID lpParam) {           //РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… РѕС‚ СЃРµСЂРІРµСЂР°
 	char buffer[1024] = { 0 };
 	SOCKET server = *(SOCKET*)lpParam;
 	while (true) {
@@ -26,7 +26,7 @@ DWORD WINAPI clientReceive(LPVOID lpParam) {           //Получение данных от сер
 	return 1;
 }
 
-DWORD WINAPI clientSend(LPVOID lpParam) {                  //Отправка данных на сервер
+DWORD WINAPI clientSend(LPVOID lpParam) {                  //РћС‚РїСЂР°РІРєР° РґР°РЅРЅС‹С… РЅР° СЃРµСЂРІРµСЂ
 	std::string s, str;
 	int command_type = 0;
 	json j;
@@ -39,8 +39,8 @@ DWORD WINAPI clientSend(LPVOID lpParam) {                  //Отправка данных на 
 			std::cin >> command_type;
 			if (!std::cin || command_type < 0 || command_type > 1) {
 				std::cout << "Please enter only 0 or 1\n";
-				std::cin.clear();                                                 // сброс флагов ошибок потока
-				std::cin.ignore(std::cin.rdbuf()->in_avail());                     // очищение содержимого потока 
+				std::cin.clear();                                                 // СЃР±СЂРѕСЃ С„Р»Р°РіРѕРІ РѕС€РёР±РѕРє РїРѕС‚РѕРєР°
+				std::cin.ignore(std::cin.rdbuf()->in_avail());                     // РѕС‡РёС‰РµРЅРёРµ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РїРѕС‚РѕРєР° 
 			}
 			else break;
 		}
@@ -54,8 +54,8 @@ DWORD WINAPI clientSend(LPVOID lpParam) {                  //Отправка данных на 
 		std::getline(std::cin, str);
 		j["command_type"] = command_type;
 		j["command"] = str;
-		s = j.dump();                                                   // превращаем json в строку (сериализация)
-		if (send(server, s.c_str(), s.length(), 0) == SOCKET_ERROR) {                         // отправка серверу, 3-й параметр - кол-во символов для отправки
+		s = j.dump();                                                   // РїСЂРµРІСЂР°С‰Р°РµРј json РІ СЃС‚СЂРѕРєСѓ (СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ)
+		if (send(server, s.c_str(), s.length(), 0) == SOCKET_ERROR) {                         // РѕС‚РїСЂР°РІРєР° СЃРµСЂРІРµСЂСѓ, 3-Р№ РїР°СЂР°РјРµС‚СЂ - РєРѕР»-РІРѕ СЃРёРјРІРѕР»РѕРІ РґР»СЏ РѕС‚РїСЂР°РІРєРё
 			std::cout << "send failed with error: " << WSAGetLastError() << std::endl;
 			return -1;
 		}
@@ -77,9 +77,9 @@ int main() {
 		return -1;
 	}
 
-	addr.sin_addr.s_addr = inet_addr("127.0.0.1");        //коннект к серверу
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");        //РєРѕРЅРЅРµРєС‚ Рє СЃРµСЂРІРµСЂСѓ
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(5555);                          //порт
+	addr.sin_port = htons(5555);                          //РїРѕСЂС‚
 	if (connect(server, (SOCKADDR*)&addr, sizeof(addr)) == SOCKET_ERROR) {
 		std::cout << "Server connection failed with error: " << WSAGetLastError() << std::endl;
 		return -1;
