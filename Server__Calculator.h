@@ -2,7 +2,7 @@
 
 #include<string>
 
-struct Complx {                // структура комплексное число, с перегруженными арифметическими операциями
+struct Complx {                // СЃС‚СЂСѓРєС‚СѓСЂР° РєРѕРјРїР»РµРєСЃРЅРѕРµ С‡РёСЃР»Рѕ, СЃ РїРµСЂРµРіСЂСѓР¶РµРЅРЅС‹РјРё Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРёРјРё РѕРїРµСЂР°С†РёСЏРјРё
 
 public:
     Complx() {           
@@ -52,8 +52,8 @@ public:
 
         result.m = (X.real * X.real) - (X.im * X.im * -1);   
 
-        result.real = result.t / result.m;    // действительная часть
-        result.im = result.e / result.m;      //коэф. мнимой части
+        result.real = result.t / result.m;    // Г¤ГҐГ©Г±ГІГўГЁГІГҐГ«ГјГ­Г Гї Г·Г Г±ГІГј
+        result.im = result.e / result.m;      //ГЄГ®ГЅГґ. Г¬Г­ГЁГ¬Г®Г© Г·Г Г±ГІГЁ
 
         return result;
     }
