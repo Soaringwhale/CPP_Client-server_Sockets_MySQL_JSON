@@ -15,6 +15,8 @@
 #include<thread>
 #include<chrono>
 
+#include"ServerCalculator.h"
+
 #pragma comment(lib, "WS2_32.lib")       
 
 using json = nlohmann::json;
