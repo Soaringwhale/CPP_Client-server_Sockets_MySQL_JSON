@@ -15,7 +15,7 @@
 #include<thread>
 #include<chrono>
 
-#include"ServerCalculator.h"
+#include"Server__Calculator.h"
 
 #pragma comment(lib, "WS2_32.lib")       
 
