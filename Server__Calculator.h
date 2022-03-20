@@ -52,8 +52,8 @@ public:
 
         result.m = (X.real * X.real) - (X.im * X.im * -1);   
 
-        result.real = result.t / result.m;    // äåéñòâèòåëüíàÿ ÷àñòü
-        result.im = result.e / result.m;      //êîýô. ìíèìîé ÷àñòè
+        result.real = result.t / result.m;    
+        result.im = result.e / result.m;      
 
         return result;
     }
